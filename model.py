@@ -360,6 +360,9 @@ class PSPNet50(Network):
         raw_output = self.layers['conv6']
         raw_output_up = tf.image.resize_bilinear(raw_output, size=[self.n_h, self.n_w], align_corners=True)
         raw_output_up = tf.image.crop_to_bounding_box(raw_output_up, 0, 0, self.o_shape[0], self.o_shape[1])
+
+        self.out_pre_softmax = raw_output_up  
+
         raw_output_up = tf.argmax(raw_output_up, axis=3)
         self.pred = decode_labels(raw_output_up, self.o_shape, num_classes)
 
